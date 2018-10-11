@@ -1,7 +1,6 @@
 package com.springboot.controller;
 
-import com.springboot.config.UploadPathConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +14,8 @@ import java.io.IOException;
 @Controller
 public class UploadController {
 
-    @Autowired
-    private UploadPathConfig uploadPathConfig;
+    @Value("${spring.servlet.multipart.location}")
+    private String uplodPath;
 
     @RequestMapping("/index")
     public String index() {
@@ -25,8 +24,6 @@ public class UploadController {
 
     @RequestMapping("/upload")
     public @ResponseBody String upload(@RequestParam("img") MultipartFile file, HttpServletRequest request) {
-
-        String uplodPath = uploadPathConfig.getUplodPath();
 
         if(!file.isEmpty()) {
             String originalFilename = file.getOriginalFilename();
