@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.dao.ResMapper">
+    <select id="findAll" resultType="com.springboot.model.Res">
+        select * from res
+    </select>
+
+    <select id="findAllResNameByRoleId" resultType="java.lang.String">
+        SELECT t1.res_name FROM res t1, role_res t2 WHERE t1.id = t2.res_id AND t2.role_id = 1
+    </select>
+
+    <insert id="save" parameterType="com.springboot.model.Res">
+        insert into res(res_name) values(#{resName})
+    </insert>
+</mapper>
