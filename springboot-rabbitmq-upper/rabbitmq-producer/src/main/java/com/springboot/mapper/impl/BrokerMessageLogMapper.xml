@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.mapper.BrokerMessageLogMapper">
+
+    <select id="query4StatusAndTimeoutMessage" resultType="com.springboot.model.BrokerMessageLog">
+        SELECT
+        message_id messageId, message, try_count tryCount, status, next_retry nextRetry, create_time createTime, update_time updateTime
+        FROM brokermessagelog WHERE `status` = 0 AND SYSDATE()>=next_retry
+    </select>
+
+    <insert id="save" parameterType="com.springboot.model.BrokerMessageLog">
+        insert into
+        `brokermessagelog`(message_id, message, try_count, status, next_retry, create_time, update_time)
+        values(#{messageId}, #{message}, #{tryCount}, #{status}, #{nextRetry}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="update4ReSend">
+        UPDATE brokermessagelog
+        SET try_count = try_count + 1,
+         update_time = SYSDATE()
+        WHERE
+            message_id = #{messageId}
+    </update>
+
+    <update id="changeBrokerMessageLogStatus">
+        UPDATE brokermessagelog
+        SET `status` = #{status},
+         update_time = SYSDATE()
+        WHERE
+            message_id = #{messageId}
+    </update>
+</mapper>
